@@ -1,0 +1,59 @@
+version: '3.9'
+services:
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: node-exporter
+    restart: always
+    ports:
+      - "9100:9100"
+    volumes:
+      - "/proc:/host/proc:ro"
+      - "/sys:/host/sys:ro"
+      - "/:/rootfs:ro"
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.ignored-mount-points'
+      - '^/(sys|proc|dev|host|etc)($$|/)'
+		labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cadvisor
+    restart: always
+    ports:
+      - "8080:8080"
+    volumes:
+      - "/:/rootfs:ro"
+      - "/var/run:/var/run:rw"
+      - "/sys:/sys:ro"
+      - "/var/lib/docker/:/var/lib/docker:ro"
+		labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+			
+			
+	watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /root/.docker/config.json:/config.json
+    environment:
+      - WATCHTOWER_SCHEDULE=0 0 0 * * *
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_MONITOR_ONLY=false
+      - WATCHTOWER_LABEL_ENABLE=1
+	
+	portainer-agent:
+    container_name: portainer-agent
+		image: portainer/agent:latest
+    ports: 
+			- 9001:9001
+		restart: always
+		volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/docker/volumes:/var/lib/docker/volumes
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+			

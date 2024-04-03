@@ -1,0 +1,20 @@
+#cloud-config
+
+package_update: true
+
+packages:
+  - ufw
+  - docker.io
+  - docker-compose
+
+runcmd:
+  # Enable the firewall
+  - ufw enable
+  # Allow OpenSSH
+  - ufw allow OpenSSH
+  # Ensure Docker service starts automatically
+  - systemctl start docker
+  - systemctl enable docker
+  # To add Docker Compose commands, you'll need to place the docker-compose.yml in the server 
+  # and then use docker-compose up. Example below is a placeholder for where to add your commands
+  # - docker-compose -f /path/to/your/docker-compose.yml up -d

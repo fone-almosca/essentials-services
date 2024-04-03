@@ -26,5 +26,5 @@ runcmd:
   # Clone the repository
   - ['git', 'clone', 'https://github.com/fone-almosca/essentials-services.git', '/home/essentials-services']
   # Navigate to the directory and run Docker Compose
-  - ['docker', 'compose', '-f', '/home/essentials-services/essential-services.yaml', 'up', '-d']
+  - ['docker', 'compose', '-f', '/home/essentials-services/essential-services.yml', 'up', '-d']
   - reboot

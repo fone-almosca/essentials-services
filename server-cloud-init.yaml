@@ -15,10 +15,11 @@ packages:
   - ufw
 
 runcmd:
-  # Enable the firewall
-  - ufw enable
-  # Allow OpenSSH
   - ufw allow OpenSSH
+  - ufw enable
+  # enable fail2ban
+  - printf "[sshd]\nenabled = true\nbanaction = iptables-multiport" > /etc/fail2ban/jail.local
+  - systemctl enable fail2ban
   # Ensure Docker service starts automatically
   - systemctl start docker
   - systemctl enable docker
@@ -26,3 +27,4 @@ runcmd:
   - ['git', 'clone', 'https://github.com/fone-almosca/essentials-services.git', '/home/essentials-services']
   # Navigate to the directory and run Docker Compose
   - ['docker', 'compose', '-f', '/home/essentials-services/essential-services.yaml', 'up', '-d']
+  - reboot

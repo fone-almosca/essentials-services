@@ -14,19 +14,24 @@ packages:
   - docker-ce-cli
   - ufw
   - nginx
+  - git
+  - fail2ban
 
 runcmd:
   - ufw allow OpenSSH
   - ufw allow 'Nginx Full'
-  - ufw enable
+  - ufw --force enable
   # enable fail2ban
-  - printf "[sshd]\nenabled = true\nbanaction = iptables-multiport" > /etc/fail2ban/jail.local
+  - echo -e "[sshd]\nenabled = true\nbanaction = iptables-multiport" > /etc/fail2ban/jail.local
   - systemctl enable fail2ban
+  - systemctl start fail2ban
   # Ensure Docker service starts automatically
   - systemctl start docker
   - systemctl enable docker
+  # Ensure the home directory exists
+  - mkdir -p /home/essentials-services
   # Clone the repository
   - ['git', 'clone', 'https://github.com/fone-almosca/essentials-services.git', '/home/essentials-services']
   # Navigate to the directory and run Docker Compose
-  - ['docker', 'compose', '-f', '/home/essentials-services/essential-services.yml', 'up', '-d']
+  - ['docker-compose', '-f', '/home/essentials-services/essential-services.yml', 'up', '-d']
   - reboot

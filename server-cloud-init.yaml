@@ -13,9 +13,11 @@ packages:
   - docker-ce
   - docker-ce-cli
   - ufw
+  - nginx
 
 runcmd:
   - ufw allow OpenSSH
+  - ufw allow 'Nginx Full'
   - ufw enable
   # enable fail2ban
   - printf "[sshd]\nenabled = true\nbanaction = iptables-multiport" > /etc/fail2ban/jail.local

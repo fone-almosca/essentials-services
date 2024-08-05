@@ -45,7 +45,6 @@ services:
 
     portainer-agent: 
         image: portainer/agent
-        restart: always
         ports: 
             - 9001:9001
         restart: always

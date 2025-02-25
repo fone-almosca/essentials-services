@@ -12,7 +12,6 @@ apt:
 packages:
   - docker-ce
   - docker-ce-cli
-  - docker-compose
   - ufw
   - nginx
   - git
@@ -68,5 +67,10 @@ runcmd:
   # Ensure the directory exists
   - mkdir -p /home/essentials-services
 
-  # Clone or update the repository
-  - if [ -d "/home/essentials-services/.git" ]; then cd /home/essentials-services && git pull; else git clone https://github.com/fone-almosca/essentia
+  # Clone
+  - ['git', 'clone', 'https://github.com/fone-almosca/essentials-services.git', '/home/essentials-services']
+	
+  # Deploy essential services
+  - ['docker','compose', '-f', '/home/essentials-services/essential-services.yml', 'up', '-d']
+	
+  - reboot

@@ -68,9 +68,7 @@ runcmd:
   - mkdir -p /home/essentials-services
 
   # Clone
-  - ['git', 'clone', 'https://github.com/fone-almosca/essentials-services.git', '/home/essentials-services']
-	
+  - ['git', 'clone', 'https://github.com/fone-almosca/essentials-services.git', '/home/essentials-services']	
   # Deploy essential services
   - ['docker','compose', '-f', '/home/essentials-services/essential-services.yml', 'up', '-d']
-	
   - reboot
